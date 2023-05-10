@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
-
+import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Header } from "@/components";
+import { IState } from '@/store';
+import { SERVER_URI } from '@/config';
+import { Table, Modal, notification } from 'antd';
+import Axios from 'axios';
+import moment from 'moment';
 import Select from "@/components/Select";
 import USDT from "@/public/usdt.png";
 import QIC from "@/public/qc.png";
@@ -9,8 +15,8 @@ import BUSD from "@/public/busd.png";
 import BITP from "@/public/bitp.png";
 import { EmptyTransaction, Refresh } from "@/public/icons";
 import classNames from "classnames";
-import { useState } from "react";
 import Footer from "@/components/Footer";
+import { authActions } from "@/store/auth";
 
 const items = [
   {
@@ -50,7 +56,52 @@ const networks = [
 const navs = ["DATE & TIME", "COIN", "AMOUNT", "ADDRESS"];
 
 const Withdraw = () => {
-  const [coin, setCoin] = useState("USDT");
+  const [coin, setCoin] = useState('BUSD');
+  const [network, setNetwork] = useState('ETHEREUM');
+  const [withdrawalAddress, setWithdrawalAddress] = useState('');
+  const [amount, setAmount] = useState(0);
+  const [history, setHistory] = useState([]);
+  const icon = useRef<object>({});
+  const { currentUser } = useSelector((state: IState) => state.auth);
+  const dispatch = useDispatch();
+
+  const withDrawAction = () => {
+    if(currentUser) {
+      Modal.confirm({
+        title: 'Withdraw Action',
+        content: 'Are you sure to withdraw?',
+        onOk() {
+          const payload = {coin, network, address: withdrawalAddress, user: currentUser._id, amount};
+          Axios.post(`${SERVER_URI}/withdraw`, payload).then(res => {
+            if(res.data.success) {
+              notification.success({ message: 'Success!', description: 'You have successfully withdrawn' });
+              localStorage.setItem('token', res.data.token);
+              dispatch(authActions.setCurrentUser(res.data.user));
+              setHistory(res.data.history);
+            }
+          });
+        }
+      })
+    }
+  }
+
+  useEffect(() => {
+    Axios.post(`${SERVER_URI}/withdraw/index`, { user: currentUser._id }).then(res => {
+      setHistory(res.data.model);
+    });
+  }, []);
+
+  if(coin !== '') {
+    items.forEach(p => {
+      if(coin === 'USD') {
+        icon.current = p.icon;
+      } 
+      else if (coin === p.name) {
+        icon.current = p.icon
+      }
+    })
+  }
+
   return (
     <div className="w-full">
       <Header />
@@ -67,14 +118,14 @@ const Withdraw = () => {
               </button>
             </div>
             <div className="mt-10">
-              <Select
+              {(coin && icon.current) && <Select
                 key={0}
-                name={items[0].name}
-                icon={items[0].icon}
+                name={coin === 'USD' ? 'USD' : coin}
+                icon={icon.current}
                 handleChange={(value) => setCoin(value)}
                 items={items}
                 label="WALLET BALANCE"
-              />
+              />}
 
               {coin !== "USD" && (
                 <motion.div
@@ -92,6 +143,7 @@ const Withdraw = () => {
                   <motion.input
                     type="text"
                     className="rounded w-full font-medium text-lg text-white px-5 xl:px-8 h-16 bg-secondary-400 outline-none"
+                    onClick={(e: any) => setWithdrawalAddress(e.target.value)}
                   />
 
                   <p className="font-medium mb-7 text-sm mt-2.5 text-white">
@@ -101,8 +153,8 @@ const Withdraw = () => {
 
                   <Select
                     key={1}
-                    name={networks[0].name}
-                    handleChange={(value) => console.log(value)}
+                    name={network}
+                    handleChange={(value) => setNetwork(value)}
                     items={networks}
                     label="SELECT NETWORK"
                   />
@@ -117,6 +169,7 @@ const Withdraw = () => {
                   <motion.input
                     type="number"
                     className="rounded w-full font-medium text-lg text-white px-5 xl:px-8 h-16 bg-secondary-400 outline-none"
+                    onClick={(e: any) => setAmount(e.target.value)}
                   />
                 </motion.div>
               )}
@@ -153,7 +206,7 @@ const Withdraw = () => {
                 </motion.div>
               )}
 
-              <button className="my-14 w-full bg-secondary-450 px-8 py-3 rounded text-white font-bold text-lg">
+              <button className="my-14 w-full bg-secondary-450 px-8 py-3 rounded text-white font-bold text-lg" onClick={() => withDrawAction()}>
                 WITHDRAW FROM {coin === "USD" ? "PAYPAL" : coin} WALLET
               </button>
             </div>
@@ -169,16 +222,12 @@ const Withdraw = () => {
                   TRANSACTION HISTORY
                 </h3>
                 <div className="grid mt-6 grid-cols-4 items-center gap-20 xl:gap-32">
-                  {navs.map((item, index) => (
-                    <div
-                      className={classNames(
-                        "text-xs xl:text-sm font-bold text-primary-450 whitespace-nowrap"
-                      )}
-                      key={index}
-                    >
-                      {item}
-                    </div>
-                  ))}
+                  {history.length && <Table size='middle' rowKey='_id' dataSource={history} pagination={false} columns={[
+                    {title: 'COIN', dataIndex: 'coin' },
+                    {title: 'AMOUNT', dataIndex: 'amount'},
+                    {title: 'ADDRESS', dataIndex: 'address'},
+                    {title: 'TIME', dataIndex: 'date', render: (text, record) => moment(text).format('YYYY-MM-DD')}
+                  ]} />}
                 </div>
                 <div className="mt-20 xl:ml-28 flex w-full justify-center">
                   <EmptyTransaction />

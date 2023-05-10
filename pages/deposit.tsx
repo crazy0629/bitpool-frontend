@@ -1,6 +1,14 @@
+import Axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-
+import { EmptyTransaction, Refresh } from "@/public/icons";
+import classNames from "classnames";
+import { useEffect, useState, useRef } from "react";
+import Footer from "@/components/Footer";
+import { IState } from '@/store';
+import { SERVER_URI } from '@/config';
+import { Table, notification } from 'antd';
 import { Header } from "@/components";
 import Select from "@/components/Select";
 import USDT from "@/public/usdt.png";
@@ -8,14 +16,14 @@ import QIC from "@/public/qc.png";
 import Paypal from "@/public/paypal.png";
 import BUSD from "@/public/busd.png";
 import BITP from "@/public/bitp.png";
+import CAKE from '@/public/cake.png';
+import { authActions } from '@/store/auth';
+import moment from 'moment';
+
 
 const DynamicQRCode = dynamic(() => import("@/components/QrCode"), {
   ssr: false,
 });
-import { EmptyTransaction, Refresh } from "@/public/icons";
-import classNames from "classnames";
-import { useState } from "react";
-import Footer from "@/components/Footer";
 
 const items = [
   {
@@ -25,6 +33,10 @@ const items = [
   {
     icon: USDT,
     name: "USDT",
+  },
+  {
+    icon: CAKE,
+    name: "CAKE"
   },
   {
     icon: Paypal,
@@ -52,10 +64,51 @@ const networks = [
   },
 ];
 
-const navs = ["COIN", "AMOUNT", "ADDRESS", "TIME"];
+// const navs = ["COIN", "AMOUNT", "ADDRESS", "TIME"];
 
 const Deposit = () => {
-  const [coin, setCoin] = useState("BUSD");
+  const [history, setHistory] = useState([]);
+  const [coin, setCoin] = useState('BUSD');
+  const [network, setNetwork] = useState('ETHEREUM');
+  const icon = useRef<object>({});
+  const { currentUser } = useSelector((state: IState) => state.auth);
+  const dispatch = useDispatch();
+
+  const getTransaction = () => {
+    if(currentUser) {
+      const payload = { network, coin, user: currentUser._id };
+      Axios.post(`${SERVER_URI}/deposit`, payload).then(res => {
+        if(res.data.success) {
+          localStorage.setItem('token', res.data.token);
+          dispatch(authActions.setCurrentUser(res.data.user));
+          setHistory(res.data.model);
+        }
+      });
+    } else {
+      notification.warning({ message: 'Warning!', description: 'Please login to' });
+    }
+  }
+
+  // setTimeout(() => getTransaction(), 15000);
+
+  if(coin !== '') {
+    items.forEach(p => {
+      if(coin === 'USD') {
+        icon.current = p.icon
+      } 
+      else if (coin === p.name) {
+        icon.current = p.icon
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (coin === 'USD') return;
+    getTransaction();
+
+    console.log(currentUser);
+  }, [coin, network])
+
   return (
     <div className="w-full">
       <Header />
@@ -64,22 +117,22 @@ const Deposit = () => {
           <div>
             <div className="flex items-center gap-20">
               <h2 className="text-white font-bold text-2xl">DEPOSIT</h2>
-              <button className="flex lg:hidden bg-secondary-450 px-6 py-2 rounded-lg items-center text-white gap-3 font-bold text-base">
+              <button onClick={() => coin !== 'PAYPAL'} className="flex lg:hidden bg-secondary-450 px-6 py-2 rounded-lg items-center text-white gap-3 font-bold text-base">
                 <div>REFRESH</div>
                 <Refresh />
               </button>
             </div>
             <div className="mt-10">
-              <Select
+              {(coin && icon.current) && <Select
                 key={0}
-                name={items[0].name}
-                icon={items[0].icon}
-                handleChange={(value) => setCoin(value)}
+                name={coin}
+                icon={icon.current}
+                handleChange={value => {setCoin(value)}}
                 items={items}
                 label="SELECT COIN"
-              />
+              />}
 
-              {coin !== "USD" && (
+              {coin !== "PAYPAL" && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -87,22 +140,22 @@ const Deposit = () => {
                 >
                   <Select
                     key={1}
-                    name={networks[0].name}
-                    handleChange={(value) => console.log(value)}
+                    name={network}
+                    handleChange={(value) => {setNetwork(value)}}
                     items={networks}
                     label="SELECT NETWORK"
                   />
 
                   <Select
                     key={2}
-                    name={"0x8bcda8975c42105fd3f57b88956b511f1ff17da1"}
+                    name={currentUser.address && (network === 'ETHEREUM' ? currentUser.address.ether.address : network === 'BNB CHAIN' ? currentUser.address.bitcoin.address : currentUser.address.tron.address)}
                     label="ADDRESS"
                     hasCopy
                   />
                 </motion.div>
               )}
 
-              {coin === "USD" && (
+              {coin === "PAYPAL" && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -123,7 +176,7 @@ const Deposit = () => {
               )}
 
               <div className="mt-14">
-                <DynamicQRCode qrValue="0x8bcda8975c42105fd3f57b88956b511f1ff17da1" />
+                {network !== 'PAYPAL' && <DynamicQRCode qrValue={currentUser.address && (network === 'ETHEREUM' ? currentUser.address.ether.address : network === 'BNB CHAIN' ? currentUser.address.bitcoin.address : currentUser.address.tron.address)} />}
               </div>
             </div>
           </div>
@@ -168,24 +221,17 @@ const Deposit = () => {
             </h3>
             <div className="flex items-center gap-32 mt-6">
               <div className="grid grid-cols-4 items-center gap-20 xl:gap-28">
-                {navs.map((item, index) => (
-                  <div
-                    className={classNames(
-                      "text-xs xl:text-sm font-bold text-primary-450",
-                      {
-                        "col-span-1": item === "ADDRESS",
-                      }
-                    )}
-                    key={index}
-                  >
-                    {item}
-                  </div>
-                ))}
+                {history.length && <Table size='middle' rowKey='_id' dataSource={history} pagination={false} columns={[
+                  {title: 'COIN', dataIndex: 'coin' },
+                  {title: 'AMOUNT', dataIndex: 'amount'},
+                  {title: 'ADDRESS', dataIndex: 'address'},
+                  {title: 'TIME', dataIndex: 'date', render: (text, record) => moment(text).format('YYYY-MM-DD')}
+                ]} />}
               </div>
             </div>
-            <div className="mt-20 flex w-full justify-center">
+            {!history.length && <div className="mt-20 flex w-full justify-center">
               <EmptyTransaction />
-            </div>
+            </div>}
           </div>
         </div>
       </div>

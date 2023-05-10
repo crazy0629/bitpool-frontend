@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Header, Swap } from "@/components";
 import { EmptyTransaction, Filter, QC, USDG } from "@/public/icons";
 import Image from "next/image";
@@ -6,10 +7,10 @@ import QIC from "@/public/qc.png";
 import Paypal from "@/public/paypal.png";
 import BUSD from "@/public/busd.png";
 import BITP from "@/public/bitp.png";
+import CAKE from '@/public/cake.png';
 import Footer from "@/components/Footer";
 import Modal from "@/components/Modal";
 import { useState } from "react";
-import Link from "next/link";
 
 const items = [
   {
@@ -22,6 +23,13 @@ const items = [
   {
     icon: USDT,
     name: "USDT",
+    value: "5.00",
+    type: "deposit",
+    hasWithdraw: true,
+  },
+  {
+    icon: CAKE,
+    name: "CAKE",
     value: "5.00",
     type: "deposit",
     hasWithdraw: true,
@@ -120,32 +128,29 @@ const Wallet = () => {
                     {item.value}
                   </div>
                   <div className="relative">
-                    <Link
-                      href={item.type === "deposit" ? "/deposit" : "#"}
-                      onClick={
-                        item.type !== "deposit" ? toggleSwap : () => null
-                      }
-                    >
+                    <Link href='/deposit'>
                       <button
                         className={`${
                           item.type === "deposit"
                             ? "bg-secondary-150"
                             : "bg-secondary-300"
                         } font-bold text-white ml-10 xl:ml-0 h-7 lg:h-9 px-1 lg:px-2 w-16 lg:w-24 lg:text-sm ten`}
+                        onClick={
+                          item.type !== "deposit" ? toggleSwap : () => console.log()
+                        }
                       >
                         {item.type === "deposit" ? "DEPOSIT" : "SWAP"}
                       </button>
+                      <div className="xl:bg-primary-50 bg-primary-100 h-3 w-6 absolute rotate-45 -top-1.5 md:right-9 lg:right-14 xl:right-7 -right-10" />
                     </Link>
-                    <div className="xl:bg-primary-50 bg-primary-100 h-3 w-6 absolute rotate-45 -top-1.5 md:right-9 lg:right-14 xl:right-7 -right-10" />
                   </div>
                   {item.hasWithdraw && (
-                    <Link href={"/withdraw"} className="relative">
+                    <Link href='/withdraw'>
                       <button
                         className={`font-bold xl:ml-10 hidden xl:block text-sm text-white border-2 border-secondary-150 h-7 lg:h-9 ten px-1 lg:px-2 w-16 lg:w-24`}
                       >
                         WITHDRAW
                       </button>
-                      {/* <div className="xl:bg-primary-50 bg-primary-100 h-3 w-6 absolute rotate-45 -top-1 md:right-12 lg:right-20 xl:-right-3 -right-6" /> */}
                     </Link>
                   )}
                   {item.hasWithdraw && (
@@ -189,7 +194,7 @@ const Wallet = () => {
         Body={Swap}
         isOpen={isSwapOpen}
         close={toggleSwap}
-        isVoid
+        isVoid={5}
       />
       <Footer />
     </div>
