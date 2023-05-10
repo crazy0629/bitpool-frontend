@@ -35,17 +35,16 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const getCakePrice = async () => {
-    const cakePrice: any = await Axios.get(
-      "https://api.binance.com/api/v3/ticker/24hr?symbol=CAKEUSDT"
-    );
-    setCakePrice(cakePrice?.data?.lastPrice);
+    // const cakePrice: any = await Axios.get(
+    //   "https://api.binance.com/api/v3/ticker/24hr?symbol=CAKEUSDT"
+    // );
+    // setCakePrice(cakePrice?.data?.lastPrice);
+    setCakePrice(2);
   };
-  console.log(currentUser);
 
   const calcTotal = () => {
     if (currentUser && currentUser.money) {
       const { busd, usdt, usd, cake, bitp, quest } = currentUser.money;
-      console.log(busd, usdt, usd, cake, bitp, quest);
       return (
         (busd ?? 0) +
         (usdt ?? 0) +
