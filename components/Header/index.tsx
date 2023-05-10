@@ -40,10 +40,12 @@ const Header = () => {
     );
     setCakePrice(cakePrice?.data?.lastPrice);
   };
+  console.log(currentUser);
 
   const calcTotal = () => {
     if (currentUser && currentUser.money) {
       const { busd, usdt, usd, cake, bitp, quest } = currentUser.money;
+      console.log(busd, usdt, usd, cake, bitp, quest);
       return (
         (busd ?? 0) +
         (usdt ?? 0) +
