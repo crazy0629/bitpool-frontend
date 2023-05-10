@@ -32,12 +32,6 @@ export default function Home() {
     return;
   }
 
-  if(!cid) {
-    notification.warning({ message: 'Warning!', description: 'Please select correct challenge' });
-    router.push('/');
-    return;
-  }
-
   return (
     <div className="w-full">
       <Header />
