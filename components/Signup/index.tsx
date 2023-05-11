@@ -37,7 +37,6 @@ const Signup = () => {
         localStorage.setItem('token', res.data.token);
         Cookie.set('uid', res.data.uid, {expires: 60*24*30});
         dispatch(authActions.setCurrentUser(jwtDecode(res.data.token)))
-        window.location.href = '/verify';
         reset();
       } else {
         notification.warning({ message: 'Error!', description: res.data.message });

@@ -105,8 +105,6 @@ const Deposit = () => {
   useEffect(() => {
     if (coin === 'USD') return;
     getTransaction();
-
-    console.log(currentUser);
   }, [coin, network])
 
   return (
