@@ -72,6 +72,18 @@ const Header = () => {
     dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
   }, []);
 
+  useEffect(() => {
+    const getFromLocalStorage = (key: string) => {
+      if (!key || typeof window === "undefined" || !localStorage) {
+        return "";
+      }
+      return window.localStorage.getItem(key);
+    };
+
+    const token = getFromLocalStorage("token");
+    dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
+  }, []);
+
   const toggleLogin = () => {
     setIsOpenSignup(false);
     setIsOpenLogin(!isOpenLogin);

@@ -1,5 +1,5 @@
 import { Header } from "@/components";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux";
 import { IState } from "@/store";
@@ -31,8 +31,6 @@ export default function Home() {
     router.push('/');
     return;
   }
-
-  console.log(cid, uid);
 
   return (
     <div className="w-full">

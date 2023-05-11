@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Header, Swap } from "@/components";
 import { EmptyTransaction, Filter, QC, USDG } from "@/public/icons";
 import Image from "next/image";
@@ -10,7 +11,6 @@ import CAKE from "@/public/cake.png";
 import Footer from "@/components/Footer";
 import Modal from "@/components/Modal";
 import { useEffect, useState, useMemo } from "react";
-import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { IState } from "@/store";
 import Axios from "axios";
