@@ -1,6 +1,6 @@
 import { Header } from "@/components";
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux";
 import { IState } from "@/store";
 import { notification } from "antd";
@@ -21,9 +21,9 @@ export default function Home() {
     };
 
     const cid: any = getFromLocalStorage("cid");
-    const uid: any = Cookies.get('uid');
+    const uid: any = getFromLocalStorage('token');
     setCid(cid);
-    setUid(uid);
+    setUid(jwtDecode(uid));
   }, []);
 
   if(!currentUser) {
@@ -31,6 +31,8 @@ export default function Home() {
     router.push('/');
     return;
   }
+
+  console.log(cid, uid);
 
   return (
     <div className="w-full">
