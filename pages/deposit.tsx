@@ -1,14 +1,25 @@
+<<<<<<< HEAD
 import Axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+=======
+import Axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { EmptyTransaction, Refresh } from "@/public/icons";
 import classNames from "classnames";
 import { useEffect, useState, useRef } from "react";
 import Footer from "@/components/Footer";
+<<<<<<< HEAD
 import { IState } from '@/store';
 import { SERVER_URI } from '@/config';
 import { Table, notification } from 'antd';
+=======
+import { IState } from "@/store";
+import { SERVER_URI } from "@/config";
+import { Table, notification } from "antd";
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 import { Header } from "@/components";
 import Select from "@/components/Select";
 import USDT from "@/public/usdt.png";
@@ -16,10 +27,17 @@ import QIC from "@/public/qc.png";
 import Paypal from "@/public/paypal.png";
 import BUSD from "@/public/busd.png";
 import BITP from "@/public/bitp.png";
+<<<<<<< HEAD
 import CAKE from '@/public/cake.png';
 import { authActions } from '@/store/auth';
 import moment from 'moment';
 
+=======
+import CAKE from "@/public/cake.png";
+import { authActions } from "@/store/auth";
+import moment from "moment";
+import jwtDecode from "jwt-decode";
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 
 const DynamicQRCode = dynamic(() => import("@/components/QrCode"), {
   ssr: false,
@@ -36,6 +54,7 @@ const items = [
   },
   {
     icon: CAKE,
+<<<<<<< HEAD
     name: "CAKE"
   },
   {
@@ -49,7 +68,22 @@ const items = [
   {
     icon: QIC,
     name: "Quest Credit",
+=======
+    name: "CAKE",
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
   },
+  // {
+  //   icon: Paypal,
+  //   name: "USD",
+  // },
+  // {
+  //   icon: BITP,
+  //   name: "BITP",
+  // },
+  // {
+  //   icon: QIC,
+  //   name: "Quest Credit",
+  // },
 ];
 
 const networks = [
@@ -68,13 +102,19 @@ const networks = [
 
 const Deposit = () => {
   const [history, setHistory] = useState([]);
+<<<<<<< HEAD
   const [coin, setCoin] = useState('BUSD');
   const [network, setNetwork] = useState('ETHEREUM');
+=======
+  const [coin, setCoin] = useState("BUSD");
+  const [network, setNetwork] = useState("ETHEREUM");
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
   const icon = useRef<object>({});
   const { currentUser } = useSelector((state: IState) => state.auth);
   const dispatch = useDispatch();
 
   const getTransaction = () => {
+<<<<<<< HEAD
     if(currentUser) {
       const payload = { network, coin, user: currentUser._id };
       Axios.post(`${SERVER_URI}/deposit`, payload).then(res => {
@@ -106,6 +146,46 @@ const Deposit = () => {
     if (coin === 'USD') return;
     getTransaction();
   }, [coin, network])
+=======
+    console.log("currentUser", currentUser);
+    if (currentUser) {
+      const payload = { network, coin, user: currentUser.id };
+      console.log(payload);
+      Axios.post(`${SERVER_URI}/deposit`, payload).then((res) => {
+        console.log(res);
+        if (res.data.success) {
+          console.log("success");
+          localStorage.setItem("token", res.data.token);
+          dispatch(authActions.setCurrentUser(jwtDecode(res.data.token)));
+          setHistory(res.data.model);
+        } else {
+          console.log("failed");
+          setHistory([]);
+        }
+      });
+    } else {
+      notification.warning({
+        message: "Warning!",
+        description: "Please login to",
+      });
+    }
+  };
+
+  // setTimeout(() => getTransaction(), 15000);
+
+  if (coin !== "") {
+    items.forEach((p) => {
+      if (coin === p.name) {
+        icon.current = p.icon;
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (coin === "USD") return;
+    getTransaction();
+  }, [coin, network]);
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 
   return (
     <div className="w-full">
@@ -115,12 +195,20 @@ const Deposit = () => {
           <div>
             <div className="flex items-center gap-20">
               <h2 className="text-white font-bold text-2xl">DEPOSIT</h2>
+<<<<<<< HEAD
               <button onClick={() => coin !== 'PAYPAL'} className="flex lg:hidden bg-secondary-450 px-6 py-2 rounded-lg items-center text-white gap-3 font-bold text-base">
+=======
+              <button
+                onClick={() => coin !== "PAYPAL"}
+                className="flex lg:hidden bg-secondary-450 px-6 py-2 rounded-lg items-center text-white gap-3 font-bold text-base"
+              >
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
                 <div>REFRESH</div>
                 <Refresh />
               </button>
             </div>
             <div className="mt-10">
+<<<<<<< HEAD
               {(coin && icon.current) && <Select
                 key={0}
                 name={coin}
@@ -129,6 +217,20 @@ const Deposit = () => {
                 items={items}
                 label="SELECT COIN"
               />}
+=======
+              {coin && icon.current && (
+                <Select
+                  key={0}
+                  name={coin}
+                  icon={icon.current}
+                  handleChange={(value) => {
+                    setCoin(value);
+                  }}
+                  items={items}
+                  label="SELECT COIN"
+                />
+              )}
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 
               {coin !== "PAYPAL" && (
                 <motion.div
@@ -139,14 +241,31 @@ const Deposit = () => {
                   <Select
                     key={1}
                     name={network}
+<<<<<<< HEAD
                     handleChange={(value) => {setNetwork(value)}}
+=======
+                    handleChange={(value) => {
+                      setNetwork(value);
+                    }}
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
                     items={networks}
                     label="SELECT NETWORK"
                   />
 
                   <Select
                     key={2}
+<<<<<<< HEAD
                     name={currentUser.address && (network === 'ETHEREUM' ? currentUser.address.ether.address : network === 'BNB CHAIN' ? currentUser.address.bitcoin.address : currentUser.address.tron.address)}
+=======
+                    name={
+                      currentUser.address &&
+                      (network === "ETHEREUM"
+                        ? currentUser.address.ether.address
+                        : network === "BNB CHAIN"
+                        ? currentUser.address.ether.address
+                        : currentUser.address.tron.address)
+                    }
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
                     label="ADDRESS"
                     hasCopy
                   />
@@ -174,13 +293,28 @@ const Deposit = () => {
               )}
 
               <div className="mt-14">
+<<<<<<< HEAD
                 {network !== 'PAYPAL' && <DynamicQRCode qrValue={currentUser.address && (network === 'ETHEREUM' ? currentUser.address.ether.address : network === 'BNB CHAIN' ? currentUser.address.bitcoin.address : currentUser.address.tron.address)} />}
+=======
+                {network !== "PAYPAL" && (
+                  <DynamicQRCode
+                    qrValue={
+                      currentUser.address &&
+                      (network === "ETHEREUM"
+                        ? currentUser.address.ether.address
+                        : network === "BNB CHAIN"
+                        ? currentUser.address.ether.address
+                        : currentUser.address.tron.address)
+                    }
+                  />
+                )}
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
               </div>
             </div>
           </div>
           <div>
             <button className="mb-12 hidden lg:flex bg-secondary-450 px-8 py-3 rounded items-center text-white gap-3 font-bold text-lg">
-              <div>REFRESH</div>
+              <div onClick={() => getTransaction()}>REFRESH</div>
               <Refresh />
             </button>
             <p className="font-medium text-base text-white">
@@ -219,6 +353,7 @@ const Deposit = () => {
             </h3>
             <div className="flex items-center gap-32 mt-6">
               <div className="grid grid-cols-4 items-center gap-20 xl:gap-28">
+<<<<<<< HEAD
                 {history.length && <Table size='middle' rowKey='_id' dataSource={history} pagination={false} columns={[
                   {title: 'COIN', dataIndex: 'coin' },
                   {title: 'AMOUNT', dataIndex: 'amount'},
@@ -230,6 +365,34 @@ const Deposit = () => {
             {!history.length && <div className="mt-20 flex w-full justify-center">
               <EmptyTransaction />
             </div>}
+=======
+                {history.length && (
+                  <Table
+                    size="middle"
+                    rowKey="_id"
+                    dataSource={history}
+                    pagination={false}
+                    columns={[
+                      { title: "COIN", dataIndex: "coin" },
+                      { title: "AMOUNT", dataIndex: "amount" },
+                      { title: "ADDRESS", dataIndex: "address" },
+                      {
+                        title: "TIME",
+                        dataIndex: "date",
+                        render: (text, record) =>
+                          moment(text).format("YYYY-MM-DD"),
+                      },
+                    ]}
+                  />
+                )}
+              </div>
+            </div>
+            {!history.length && (
+              <div className="mt-20 flex w-full justify-center">
+                <EmptyTransaction />
+              </div>
+            )}
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
           </div>
         </div>
       </div>

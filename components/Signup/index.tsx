@@ -2,11 +2,19 @@ import Link from "next/link";
 import Image from "next/image";
 import * as yup from "yup";
 import axios from "axios";
+<<<<<<< HEAD
 import jwtDecode from 'jwt-decode';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
 import { notification } from 'antd';
+=======
+import jwtDecode from "jwt-decode";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { notification } from "antd";
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button, { butonTypes, variantTypes } from "../Button";
 import { Check } from "@/public/icons";
@@ -25,7 +33,16 @@ const schema = yup.object().shape({
 });
 
 const Signup = () => {
+<<<<<<< HEAD
   const { register, handleSubmit, formState: { errors }, reset, } = useForm<any>({ resolver: yupResolver(schema) });
+=======
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<any>({ resolver: yupResolver(schema) });
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 
   const [remember, setRemember] = useState(false);
   const dispatch = useDispatch();
@@ -33,6 +50,7 @@ const Signup = () => {
   const onSubmit = (data: any) => {
     axios.post(`${SERVER_URI}/signup`, data).then((res) => {
       if (res.data.success) {
+<<<<<<< HEAD
         notification.success({ message: 'Success!', description: "You're registered successfully!" });
         localStorage.setItem('token', res.data.token);
         Cookie.set('uid', res.data.uid, {expires: 60*24*30});
@@ -40,6 +58,21 @@ const Signup = () => {
         reset();
       } else {
         notification.warning({ message: 'Error!', description: res.data.message });
+=======
+        notification.success({
+          message: "Success!",
+          description: "You're registered successfully!",
+        });
+        localStorage.setItem("token", res.data.token);
+        Cookie.set('uid', res.data.uid, {expires: 60*24*30});
+        dispatch(authActions.setCurrentUser(jwtDecode(res.data.token)));
+        reset();
+      } else {
+        notification.warning({
+          message: "Error!",
+          description: res.data.message,
+        });
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
       }
     });
   };
@@ -50,15 +83,48 @@ const Signup = () => {
         Sign Up to your BitPool Account
       </p>
 
+<<<<<<< HEAD
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className="mt-10">
+=======
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+        className="mt-10"
+      >
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
         <div className="flex flex-col lg:flex-row justify-between w-full gap-2">
           <Input name="first_name" label="FIRST NAME" register={register("first_name")} error={errors.first_name?.message} placeholder="Enter your first name" />
           <Input name="last_name" label="LAST NAME" register={register("last_name")} error={errors.last_name?.message} placeholder="Enter your last name" />
         </div>
 
+<<<<<<< HEAD
         <Input name="username" label="USERNAME" register={register("username")} error={errors.username?.message} placeholder="Enter your username" />
         <Input name="signup_email" label="EMAIL" register={register("email")} error={errors.email?.message} placeholder="Enter your email" />
         <Input name="signup_password" label="PASSWORD" register={register("password")} error={errors.password?.message} placeholder="Enter your password" type="password" />
+=======
+        <Input
+          name="username"
+          label="USERNAME"
+          register={register("username")}
+          error={errors.username?.message}
+          placeholder="Enter your username"
+        />
+        <Input
+          name="signup_email"
+          label="EMAIL"
+          register={register("email")}
+          error={errors.email?.message}
+          placeholder="Enter your email"
+        />
+        <Input
+          name="signup_password"
+          label="PASSWORD"
+          register={register("password")}
+          error={errors.password?.message}
+          placeholder="Enter your password"
+          type="password"
+        />
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
 
         <div className="mt-10 flex items-center gap-4">
           <div onClick={() => setRemember(!remember)} className={`h-8 w-8 rounded transition-all duration-300 flex justify-center cursor-pointer items-center ${
@@ -69,7 +135,17 @@ const Signup = () => {
         </div>
 
         <div className="lg:mt-12 mt-10 w-full">
+<<<<<<< HEAD
           <Button variant={variantTypes.full} isFull type={butonTypes.submit} px="px-4" text="SIGN UP" />
+=======
+          <Button
+            variant={variantTypes.full}
+            isFull
+            type={butonTypes.submit}
+            px="px-4"
+            text="SIGN UP"
+          />
+>>>>>>> 9ea9a21dc9375773cc5b0e05fe3af6135a7a56c2
         </div>
       </form>
 
