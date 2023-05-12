@@ -32,6 +32,7 @@ const Signup = () => {
   const onSubmit = (data: any) => {
     axios.post(`${SERVER_URI}/signup`, data).then((res) => {
       if (res.data.success) {
+        console.log(jwtDecode(res.data.token));
         notification.success({ message: 'Success!', description: "You're registered successfully!" });
         localStorage.setItem('token', res.data.token);
         dispatch(authActions.setCurrentUser(jwtDecode(res.data.token)))

@@ -55,31 +55,20 @@ const Header = () => {
   };
 
   useEffect(() => {
+    const getFromLocalStorage = (key: string) => {
+      if (!key || typeof window === "undefined" || !localStorage) {
+        return "";
+      }
+      return window.localStorage.getItem(key);
+    };
+
+    const token = getFromLocalStorage("token");
+    dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
     getCakePrice();
-  }, []);
-
-  useEffect(() => {
-    const getFromLocalStorage = (key: string) => {
-      if (!key || typeof window === "undefined" || !localStorage) {
-        return "";
-      }
-      return window.localStorage.getItem(key);
-    };
-
-    const token = getFromLocalStorage("token");
-    dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
-  }, []);
-
-  useEffect(() => {
-    const getFromLocalStorage = (key: string) => {
-      if (!key || typeof window === "undefined" || !localStorage) {
-        return "";
-      }
-      return window.localStorage.getItem(key);
-    };
-
-    const token = getFromLocalStorage("token");
-    dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
+    const user: any = token ? jwtDecode(token) : null;
+    Axios.post(`${SERVER_URI}/getUserInfo`, { user: user?.id }).then(res => {
+      localStorage.setItem('token', res.data.token);
+    })
   }, []);
 
   const toggleLogin = () => {
@@ -138,9 +127,7 @@ const Header = () => {
                         <QC width={"29.759"} height={"34.569"} />
                       </div>
                       <div className="font-medium flex lg:text-base text-xs text-white font-Poppins">
-                        {currentUser &&
-                          currentUser.money &&
-                          currentUser.money.quest}{" "}
+                        {currentUser && currentUser.money && currentUser.money.quest}{" "}
                         QC
                       </div>
                     </div>

@@ -38,7 +38,7 @@ export default function Home() {
 
       <div className="min-h-90vh w-full game-dashboard">
 
-      {uid && cid && <iframe src={`https://portal.bitpool.gg/?c=${cid}&u=${uid}`} frameBorder="0" className="game-iframe" id="iframe"></iframe>}
+      {uid && cid && <iframe src={`https://portal.bitpool.gg/?c=4&u=1813`} frameBorder="0" className="game-iframe" id="iframe"></iframe>}
 
       </div>
     </div>
