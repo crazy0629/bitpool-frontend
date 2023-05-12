@@ -135,8 +135,7 @@ const SwapCoin = ({ next }: { next: (num?: number) => void }) => {
   }, [cakePrice]);
 
   const getCakePrice = async () => {
-    const cakePrice: any = await Axios.get(`${SERVER_URI}/cake_price`);
-    cakePrice ? setCakePrice(cakePrice?.data?.lastPrice) : setCakePrice(2);
+    setCakePrice(2);
   };
 
   useEffect(() => {
