@@ -91,10 +91,7 @@ const Wallet = () => {
   }, []);
 
   const getCakePrice = async () => {
-    const cakePrice: any = await Axios.get(
-      "https://api.binance.com/api/v3/ticker/24hr?symbol=CAKEUSDT",
-      {headers: {'Access-Control-Allow-Origin': '*'}}
-    );
+    const cakePrice: any = await Axios.get(`${SERVER_URI}/cake_price`);
     setCakePrice(cakePrice?.data?.lastPrice);
   };
 

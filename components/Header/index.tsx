@@ -22,7 +22,8 @@ import { MobileNav } from "../Nav";
 import Signup from "../Signup";
 import { IState } from "@/store";
 import { authActions } from "@/store/auth";
-import Axios from "axios";
+import { SERVER_URI } from "@/config";
+import Axios from 'axios';
 
 const Header = () => {
   const { currentUser } = useSelector((state: IState) => state.auth);
@@ -35,10 +36,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const getCakePrice = async () => {
-    const cakePrice: any = await Axios.get(
-      "https://api.binance.com/api/v3/ticker/24hr?symbol=CAKEUSDT",
-      {headers: {'Access-Control-Allow-Origin': '*'}}
-    );
+    const cakePrice: any = await Axios.get(`${SERVER_URI}/cake_price`);
     setCakePrice(cakePrice?.data?.lastPrice);
   };
 
