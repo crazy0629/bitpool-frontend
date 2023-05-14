@@ -49,7 +49,6 @@ const ChallengeModal: React.FC = () => {
                     <Select.Option key={1} value={1}>BITP</Select.Option>
                     <Select.Option key={2} value={2}>BUSD</Select.Option>
                     <Select.Option key={3} value={3}>USDT</Select.Option>
-                    <Select.Option key={4} value={4}>CAKE</Select.Option>
                 </Select>
             </Form.Item>
             <Form.Item wrapperCol={{offset: 20, span: 4}}>

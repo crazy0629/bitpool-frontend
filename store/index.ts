@@ -28,7 +28,6 @@ export interface IState {
         bitcoin: { privateKey: string; address: string };
         tron: { privateKey: string; address: string };
       };
-      index: number;
     };
     type: string;
   };

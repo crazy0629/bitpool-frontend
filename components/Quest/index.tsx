@@ -19,7 +19,6 @@ export interface IProp {
   index: number;
   quest: {
     _id: string;
-    index: number;
     amount: number;
     streak: number;
     qc: number;
@@ -41,12 +40,12 @@ const QuestComponent = (prop: IProp) => {
       });
       return;
     }
-    localStorage.setItem("cid", prop.quest.index.toString());
+    localStorage.setItem("cid", prop.quest._id);
     localStorage.setItem("level", prop.quest.difficalty.toString());
-    const uid: any = currentUser.index;
+    const uid: any = currentUser.id;
 
     Axios.post(`${SERVER_URI}/game/start`, {
-      cid: prop.quest.index,
+      cid: prop.quest._id,
       uid,
     }).then((res) => {
       if (res.data.success) {
