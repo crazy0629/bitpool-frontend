@@ -193,6 +193,7 @@ const MobileNav = ({ open, close }: { open: boolean; close: () => void }) => {
   useEffect(() => {
     setIsOpen(open);
   }, [open]);
+
   return (
     <>
       <motion.nav
@@ -242,7 +243,7 @@ const MobileNav = ({ open, close }: { open: boolean; close: () => void }) => {
                   className="cursor-pointer"
                 />
                 <h4 className="text-center font-bold text-lg text-primary-450 mt-2">
-                  BITSPORT_ADMIN
+                  {currentUser && currentUser.email}
                 </h4>
                 <div
                   onClick={logout}

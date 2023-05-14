@@ -166,14 +166,14 @@ const Header = () => {
             </div>
             {currentUser && currentUser.email ? (
               <div className="flex items-center justify-end gap-4">
-                <Image
+                {/* <Image
                   priority={true}
                   height={75}
                   width={79}
                   src={Profile}
                   alt="profile"
                   className="cursor-pointer"
-                />
+                /> */}
                 <div
                   onClick={logout}
                   className="text-white font-bold cursor-pointer"
