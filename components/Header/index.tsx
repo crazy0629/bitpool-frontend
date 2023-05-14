@@ -23,7 +23,8 @@ import Signup from "../Signup";
 import { IState } from "@/store";
 import { authActions } from "@/store/auth";
 import { SERVER_URI } from "@/config";
-import Axios from 'axios';
+import Axios from "axios";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const { currentUser } = useSelector((state: IState) => state.auth);
@@ -34,8 +35,13 @@ const Header = () => {
   const [cakePrice, setCakePrice] = useState<number>(0);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const getCakePrice = async () => {
+    // const cakePrice: any = await Axios.get(
+    //   "https://api.binance.com/api/v3/ticker/24hr?symbol=CAKEUSDT"
+    // );
+    // setCakePrice(cakePrice?.data?.lastPrice);
     setCakePrice(2);
   };
 
@@ -54,23 +60,6 @@ const Header = () => {
     return 0;
   };
 
-  useEffect(() => {
-    const getFromLocalStorage = (key: string) => {
-      if (!key || typeof window === "undefined" || !localStorage) {
-        return "";
-      }
-      return window.localStorage.getItem(key);
-    };
-
-    const token = getFromLocalStorage("token");
-    dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
-    getCakePrice();
-    const user: any = token ? jwtDecode(token) : null;
-    Axios.post(`${SERVER_URI}/getUserInfo`, { user: user?.id }).then(res => {
-      localStorage.setItem('token', res.data.token);
-    })
-  }, []);
-
   const toggleLogin = () => {
     setIsOpenSignup(false);
     setIsOpenLogin(!isOpenLogin);
@@ -85,6 +74,55 @@ const Header = () => {
   const toggleChallenge = () => {
     setIsChallengeOpen(!isChallengeOpen);
   };
+  const logout = () => {
+    localStorage.removeItem("token");
+    dispatch(authActions.setCurrentUser({}));
+    router.push("/");
+  };
+
+  const clickLoginRoute = () => {
+    toggleSignup();
+    toggleLogin();
+  };
+
+  const clickSignupRoute = () => {
+    toggleLogin();
+    toggleSignup();
+  };
+
+  useEffect(() => {
+    getCakePrice();
+  }, []);
+
+  useEffect(() => {
+    const getFromLocalStorage = (key: string) => {
+      if (!key || typeof window === "undefined" || !localStorage) {
+        return "";
+      }
+      return window.localStorage.getItem(key);
+    };
+
+    const token = getFromLocalStorage("token");
+    dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
+    getCakePrice();
+    const user: any = token ? jwtDecode(token) : null;
+    Axios.post(`${SERVER_URI}/getUserInfo`, { user: user?.id }).then((res) => {
+      localStorage.setItem("token", res.data.token);
+    });
+  }, []);
+
+  useEffect(() => {
+    const getFromLocalStorage = (key: string) => {
+      if (!key || typeof window === "undefined" || !localStorage) {
+        return "";
+      }
+      return window.localStorage.getItem(key);
+    };
+
+    const token = getFromLocalStorage("token");
+    dispatch(authActions.setCurrentUser(token ? jwtDecode(token) : {}));
+  }, []);
+
   return (
     <>
       <div className="bg-primary-200 small-border-b xl:border-b-primary-150 border-b-black">
@@ -127,7 +165,9 @@ const Header = () => {
                         <QC width={"29.759"} height={"34.569"} />
                       </div>
                       <div className="font-medium flex lg:text-base text-xs text-white font-Poppins">
-                        {currentUser && currentUser.money && currentUser.money.quest}{" "}
+                        {currentUser &&
+                          currentUser.money &&
+                          currentUser.money.quest}{" "}
                         QC
                       </div>
                     </div>
@@ -140,14 +180,22 @@ const Header = () => {
               )}
             </div>
             {currentUser && currentUser.email ? (
-              <Image
-                priority={true}
-                height={75}
-                width={79}
-                src={Profile}
-                alt="profile"
-                className="cursor-pointer"
-              />
+              <div className="flex items-center justify-end gap-4">
+                <Image
+                  priority={true}
+                  height={75}
+                  width={79}
+                  src={Profile}
+                  alt="profile"
+                  className="cursor-pointer"
+                />
+                <div
+                  onClick={logout}
+                  className="text-white font-bold cursor-pointer"
+                >
+                  Logout
+                </div>
+              </div>
             ) : (
               <div className="flex items-center gap-4">
                 <Button onClick={toggleSignup} px="px-7" text="SIGN UP" />
@@ -188,13 +236,19 @@ const Header = () => {
                 <div className="cursor-pointe px-2 py-3 flex items-center gap-3 bg-primary-950 h-8 rounded-l">
                   <USDG width={17} height={19.75} />
                   <div className="font-medium lg:text-base ten text-white font-Poppins">
-                    33
+                    {calcTotal().toFixed(2)}
                   </div>
                 </div>
               </Link>
               <div className="cursor-pointer relative px-3 py-3 flex justify-center items-center bg-primary-1000 h-8 rounded-br">
                 <ArrowDown />
                 <div className="h-4 w-4 bg-primary-50 rotate-45 -top-2 -right-2.5 absolute"></div>
+              </div>
+              <div
+                onClick={logout}
+                className="text-white hidden md:block md:ml-7 font-bold cursor-pointer"
+              >
+                Logout
               </div>
             </div>
           ) : (
@@ -207,21 +261,21 @@ const Header = () => {
       <MobileNav open={isNavOpen} close={toggleNav} />
       <Modal
         key={0}
-        Body={Login}
+        Body={<Login switch={clickSignupRoute} close={toggleLogin} />}
         isOpen={isOpenLogin}
         close={toggleLogin}
         isVoid={1}
       />
       <Modal
         key={1}
-        Body={Signup}
+        Body={<Signup switch={clickLoginRoute} close={toggleSignup} />}
         isOpen={isOpenSignup}
         close={toggleSignup}
         isVoid={2}
       />
       <Modal
         key={2}
-        Body={NoChallenge}
+        Body={<NoChallenge />}
         isOpen={isChallengeOpen}
         close={toggleChallenge}
         isVoid={3}
