@@ -193,6 +193,7 @@ const MobileNav = ({ open, close }: { open: boolean; close: () => void }) => {
   useEffect(() => {
     setIsOpen(open);
   }, [open]);
+  console.log(currentUser)
 
   return (
     <>
@@ -243,7 +244,7 @@ const MobileNav = ({ open, close }: { open: boolean; close: () => void }) => {
                   className="cursor-pointer"
                 />
                 <h4 className="text-center font-bold text-lg text-primary-450 mt-2">
-                  {currentUser && currentUser.email}
+                  {currentUser && currentUser.username}
                 </h4>
                 <div
                   onClick={logout}
