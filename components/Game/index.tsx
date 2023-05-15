@@ -6,19 +6,13 @@ import { notification } from "antd";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import FullScreen from "@/public/full-screen.svg";
+import jwtDecode from "jwt-decode";
 
 export default function GameComponent() {
   const [uid, setUid] = useState(0);
-  const [cid, setCid] = useState(0);
+  const [cid, setCid] = useState("");
   const router = useRouter();
   const { currentUser } = useSelector((state: IState) => state.auth);
-
-  const getFromLocalStorage = (key: string) => {
-    if (!key || typeof window === "undefined" || !localStorage) {
-      return "";
-    }
-    return window.localStorage.getItem(key);
-  };
 
   const requestFullScreen = () => {
     const elem: any = document.getElementById("iframe");
@@ -40,9 +34,17 @@ export default function GameComponent() {
       router.push("/");
     }
 
+    const getFromLocalStorage = (key: string) => {
+      if (!key || typeof window === "undefined" || !localStorage) {
+        return "";
+      }
+      return window.localStorage.getItem(key);
+    };
+
     const cid: any = getFromLocalStorage("cid");
-    setCid(Number(cid));
-    setUid(currentUser.index);
+    const token: any = getFromLocalStorage('token');
+    setCid(cid);
+    setUid(token ? jwtDecode(token) : 0);
   }, [currentUser]);
 
   return (
