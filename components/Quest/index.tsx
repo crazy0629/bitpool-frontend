@@ -24,6 +24,7 @@ export interface IProp {
     qc: number;
     difficalty: number;
     coin_sku: number;
+    index: number;
   };
 }
 
@@ -45,7 +46,7 @@ const QuestComponent = (prop: IProp) => {
     const uid: any = currentUser.id;
 
     Axios.post(`${SERVER_URI}/game/start`, {
-      cid: prop.quest._id,
+      cid: prop.quest.index,
       uid,
     }).then((res) => {
       if (res.data.success) {
