@@ -43,7 +43,7 @@ const QuestComponent = (prop: IProp) => {
     }
     localStorage.setItem("cid", prop.quest._id);
     localStorage.setItem("level", prop.quest.difficalty.toString());
-    const uid: any = currentUser.id;
+    const uid: any = currentUser.index;
 
     Axios.post(`${SERVER_URI}/game/start`, {
       cid: prop.quest.index,
