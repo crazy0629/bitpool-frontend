@@ -153,7 +153,7 @@ const QuestComponent = (prop: IProp) => {
               <span className="text-white">
                 {" "}
                 {prop.quest.difficalty === 1
-                  ? "HARD"
+                  ? "EASY"
                   : prop.quest.difficalty === 2
                   ? "MEDIUM"
                   : "HARD"}
