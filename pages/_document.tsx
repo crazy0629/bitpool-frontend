@@ -1,9 +1,13 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Html, Main, Head, NextScript } from "next/document";
 
 export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <title>
+          BitPool - Play and Earn Crypto with BitPool: The World's First
+          AI-Powered Web-3 Based 8-Ball Pool Game by BitSport
+        </title>
         <meta
           property="og:title"
           content="Play and Earn Crypto with BitPool: The World's First AI-Powered Web-3 Based 8-Ball Pool Game by BitSport"

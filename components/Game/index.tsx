@@ -6,7 +6,6 @@ import { notification } from "antd";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import FullScreen from "@/public/full-screen.svg";
-import jwtDecode from "jwt-decode";
 
 export default function GameComponent() {
   const [uid, setUid] = useState(0);
