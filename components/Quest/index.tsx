@@ -96,7 +96,7 @@ const QuestComponent = (prop: IProp) => {
           <div className="text-primary-450 text-sm font-bold">DIFFICALTY</div>
           <div className=" text-white text-base font-semibold">
             {prop.quest.difficalty === 1
-              ? "HARD"
+              ? "EASY"
               : prop.quest.difficalty === 2
               ? "MEDIUM"
               : "HARD"}
