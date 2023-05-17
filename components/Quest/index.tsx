@@ -77,7 +77,9 @@ const QuestComponent = (prop: IProp) => {
               ? "BITP"
               : prop.quest.coin_sku === 2
               ? "BUSD"
-              : "USDT"}
+              : prop.quest.coin_sku === 3
+              ? "USDT"
+              : "CAKE"}
           </div>
         </div>
         <div className={`flex flex-col items-center`}>
