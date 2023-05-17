@@ -41,7 +41,7 @@ const QuestComponent = (prop: IProp) => {
       });
       return;
     }
-    localStorage.setItem("cid", prop.quest._id);
+    localStorage.setItem("cid", prop.quest.index.toString());
     localStorage.setItem("level", prop.quest.difficalty.toString());
     const uid: any = currentUser.index;
 
