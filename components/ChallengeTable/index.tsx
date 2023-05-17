@@ -45,7 +45,6 @@ const ChallengeTable = () => {
             }
         })
     }
-    console.log(challenges);
 
     const source: any = useMemo(() => challenges?.map((p: object, i) => { return { ...p, index: i + 1, key: i } }), [challenges]);
 

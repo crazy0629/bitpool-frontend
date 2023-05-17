@@ -193,7 +193,6 @@ const MobileNav = ({ open, close }: { open: boolean; close: () => void }) => {
   useEffect(() => {
     setIsOpen(open);
   }, [open]);
-  console.log(currentUser)
 
   return (
     <>
