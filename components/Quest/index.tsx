@@ -151,8 +151,8 @@ const QuestComponent = (prop: IProp) => {
                   ? "BITP"
                   : prop.quest.coin_sku === 2
                   ? "BUSD"
-		  : prop.quest.coin_sku === 3
-              	  ? "USDT"
+                  : prop.quest.coin_sku === 3
+                  ? "USDT"
                   : "CAKE"}
               </span>
             </div>
