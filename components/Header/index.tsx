@@ -46,7 +46,7 @@ const Header = () => {
   };
 
   const getCakePrice = async () => {
-    getCake().then(price => {
+    getCake().then((price) => {
       setCakePrice(price);
     });
   };
@@ -101,10 +101,12 @@ const Header = () => {
     const user: any = token ? jwtDecode(token) : null;
     dispatch(authActions.setCurrentUser(token ? user : {}));
     getCakePrice();
-    if(user) {
-      Axios.post(`${SERVER_URI}/getUserInfo`, { user: user?.id }).then((res) => {
-        localStorage.setItem("token", res.data.token);
-      });
+    if (user) {
+      Axios.post(`${SERVER_URI}/getUserInfo`, { user: user?.id }).then(
+        (res) => {
+          localStorage.setItem("token", res.data.token);
+        }
+      );
     }
   }, []);
 
