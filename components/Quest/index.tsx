@@ -110,7 +110,7 @@ const QuestComponent = (prop: IProp) => {
           onClick={() => setOpen(!open)}
           className={`flex flex-col items-center hide`}
         >
-          <div className="text-primary-450 text-sm font-bold">difficultY</div>
+          <div className="text-primary-450 text-sm font-bold">DIFFICULTY</div>
           <div className=" text-white text-base font-semibold">
             {prop.quest.difficulty === 1
               ? "EASY"
