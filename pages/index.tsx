@@ -35,7 +35,7 @@ export default function Home() {
       </div>
 
       <section className="px-3 xl:px-0 mt-6 xl:mt-0 xl:container xl:mx-auto">
-      <h3 className="xl:text-2xl text-xl text-white font-bold ">QUESTS</h3>
+        <h3 className="xl:text-2xl text-xl text-white font-bold ">QUESTS</h3>
         <p className="text-secondary-200 xl:text-sm text-xs">
           Accept and play some of the below F2E (Free to Earn) modes, earn $BITP
           and other Crypto
