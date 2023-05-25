@@ -10,7 +10,7 @@ import { IState } from '@/store';
 
 interface RecordType {
     title: string;
-    difficalty: number;
+    difficulty: number;
     streak: number;
     amount: number;
     qc: number;
@@ -52,7 +52,7 @@ const ChallengeTable = () => {
         <Table dataSource={source} columns={[
             { title: 'Id', dataIndex: 'index' },
             { title: 'Title', dataIndex: 'title' },
-            { title: 'Difficalty', dataIndex: 'difficalty' },
+            { title: 'difficulty', dataIndex: 'difficulty' },
             { title: 'Streak', dataIndex: 'streak' },
             { title: 'Amount', dataIndex: 'amount' },
             { title: 'QC', dataIndex: 'qc' },

@@ -61,7 +61,7 @@ const ChallengeModal: React.FC = () => {
     >
       <Form
         form={form}
-        initialValues={{ difficalty: 1, cointype: 1 }}
+        initialValues={{ difficulty: 1, cointype: 1 }}
         onFinish={onSubmit}
         style={{ marginTop: 50 }}
         labelCol={{ span: 4 }}
@@ -76,9 +76,9 @@ const ChallengeModal: React.FC = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="Difficalty"
-          name="difficalty"
-          rules={[{ required: true, message: "Please select difficalty." }]}
+          label="difficulty"
+          name="difficulty"
+          rules={[{ required: true, message: "Please select difficulty." }]}
         >
           <Select>
             <Select.Option key={1} value={1}>
