@@ -5,12 +5,16 @@ import Pagination from "@/components/Pagination";
 import QuestComponent from "@/components/Quest";
 import Footer from "@/components/Footer";
 import { SERVER_URI } from "@/config";
+import { Spin } from "antd";
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios.get(`${SERVER_URI}/challenge/index`).then((res) => {
+      setLoading(false);
       setData(res.data.models);
     });
   }, []);
@@ -37,14 +41,18 @@ export default function Home() {
           and other Crypto
         </p>
 
-        <div className="mt-5 xl:gap-11 flex w-full flex-col xl:flex-row  items-start justify-between">
-          <div className="flex w-full flex-col gap-2">
-            {data.map((item, index) => (
-                <QuestComponent key={index} quest={item} index={index} />
-              ))}
-            <Pagination />
-          </div>
-        </div>
+        {
+          <Spin spinning={loading} tip="Loading...">
+            <div className="mt-5 xl:gap-11 flex w-full flex-col xl:flex-row  items-start justify-between">
+              <div className="flex w-full flex-col gap-2">
+                {data.map((item, index) => (
+                  <QuestComponent key={index} quest={item} index={index} />
+                ))}
+                <Pagination />
+              </div>
+            </div>
+          </Spin>
+        }
       </section>
 
       <Footer />
